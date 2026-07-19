@@ -1,6 +1,6 @@
 ---
 name: beat-synced-montage-builder
-description: Build beat-synced social video montages from song-analysis outputs and source footage. Use when an agent needs to assemble, plan, or revise a music-timed edit; map footage to beats/onsets/cut markers; create vertical or landscape montage timelines; integrate audio-reactive FX into shots; mix gameplay, crowd, concert, nature, menu, or other accent footage; generate timeline CSVs, contact sheets, and edit briefs; or adapt the Conteto Machino / Smash Mash / Surya workflow for another song or footage library.
+description: Build beat-synced social video montages from song-analysis outputs and source footage. Use when an agent needs to assemble, plan, or revise a music-timed edit; map footage to beats/onsets/cut markers; create vertical or landscape montage timelines; integrate audio-reactive FX into shots; mix gameplay, crowd, concert, nature, menu, or other accent footage; generate timeline CSVs, contact sheets, and edit briefs; or adapt the Conteto Machino / Smash Mash workflow for another song or footage library.
 ---
 
 # Beat-Synced Montage Builder
@@ -103,7 +103,7 @@ Generated clips and stills must be labeled in timeline/brief outputs with `gener
 - For a `35s` proof cut, `70-90` segments is a strong target when the source material can support it.
 - Reserve the strongest footage for the highest-energy section; do not spend all peak material during setup.
 
-## Vertical Music-Video Pattern (Surya/Das, 2026-07)
+## Vertical Music-Video Pattern (2026-07)
 
 For 9:16 music promotion (the newer lane alongside the Smash pattern): 1080×1920@30 always; loop-seam ending (photometric state returns to frame 0 over the last ~22 frames); hook text with second-line-drop kinetics (line 1 static at frame 0, line 2 appearing beat-fused within ±100ms of a real onset at 0.8–1.3s); either a Sweeps-style container (black canvas, centered footage window, monospace hook above, credit below) or full-bleed cinematic. Iterate as numbered versions on stable infrastructure — change only the effect language between versions; when the client loves a 2-second moment, make that moment the next version's whole language.
 

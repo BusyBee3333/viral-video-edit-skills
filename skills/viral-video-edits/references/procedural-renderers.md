@@ -1,6 +1,6 @@
 # Procedural Shader Renderers (headless GPU)
 
-Offline audio-reactive GLSL rendering with Python + moderngl. This is how tunnels, portals, kaleidoscopes, starbursts, and hero title pieces are made — and how they get fused with real footage. Reference implementations: `script/procedural/render_*.py` in the home repo (dream_portal, hyper_kaleido, hyper_space_jump, color_tunnel, glass_bloom, fractal_neon, neon_cathedral, mandala, portal_weave, shader_pack).
+Offline audio-reactive GLSL rendering with Python + moderngl. This is how tunnels, portals, kaleidoscopes, starbursts, and hero title pieces are made — and how they get fused with real footage. Bundled, runnable implementations: `scripts/procedural/render_*.py` (dream_portal, hyper_kaleido, hyper_space_jump, color_tunnel, glass_bloom, fractal_neon, neon_cathedral, mandala, portal_weave, shader_pack) plus `footage_fx.py` and `subject_fx.py`.
 
 ## The skeleton (identical across every renderer)
 

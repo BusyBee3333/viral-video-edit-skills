@@ -35,7 +35,7 @@ Per-frame person masks come from **Apple Vision** (`VNGenerateForegroundInstance
 - In shaders, threshold with `smoothstep(0.30, 0.70, matte)`. Rim/edge effects trace a 4-tap gradient of the matte; halos come from dilated matte samples on a 6-point circle.
 - Watch for false positives (e.g. wall art matting as "person") — inspect mattes per clip and blacklist bad sources as foreground.
 
-Reference implementation: `script/surya_people_fx/` (generate_local_person_matte.swift/.py, media_contract.py).
+Bundled implementation: `scripts/matte/generate_local_person_matte.swift` (the Vision matte generator) and `scripts/matte/media_contract.py` (the quality-gate thresholds as code).
 
 ## Three build architectures (choose per edit)
 

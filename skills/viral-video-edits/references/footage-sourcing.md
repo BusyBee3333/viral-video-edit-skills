@@ -1,6 +1,6 @@
 # Footage Sourcing & the Shot-Level Quality Gate
 
-Rules learned from a failed first library (coffee beans in "cozy", silent-film title cards, random junk in frame). Root causes: query literalism (text matches vocabulary, not vibe), file-level pooling (whole files admitted, random timestamps sampled), no real quality floor.
+Rules learned from a failed first library (coffee beans in "cozy", silent-film title cards, random junk in frame). Root causes: query literalism (text matches vocabulary, not vibe), file-level pooling (whole files admitted, random timestamps sampled), no real quality floor. Bundled implementation of the gate below: `scripts/scan_shot_quality.py`.
 
 ## The SOP
 

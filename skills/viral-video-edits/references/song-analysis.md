@@ -2,7 +2,7 @@
 
 How a song becomes editing intelligence: beat grid, energy, sections, cut priorities, viral window, and the onset-locked cut grid. Everything here is librosa end to end — no aubio.
 
-Reference implementation (when working in the home repo): `script/analyze_song_for_editing.py`, `script/choose_viral_window.py`, `script/build_onset_cut.py`.
+Bundled implementations: `scripts/choose_viral_window.py` (§2) and `scripts/build_onset_cut.py` (§3) in this skill. The full-song analysis producer (§1) is bundled in the companion `song-edit-analysis` skill as `scripts/analyze_song_for_editing.py`.
 
 ## 1. Full-song analysis (run once per song)
 

@@ -16,7 +16,14 @@ These were extracted from a working production system and its accumulated field 
   - `delivery-qa.md` — encode settings, QA pass, verdict format
   - `design-docs.md` — how to plan a production before building it
 
-- **`skills/song-edit-analysis/`**, **`skills/beat-synced-montage-builder/`**, **`skills/generated-media-sourcing/`**, **`skills/edit-delivery-qa/`** — a companion kit of narrower, script-bundled skills (from the [beat-synced-codex-edit-kit](https://github.com/) project) covering the same pipeline stage by stage, each with a runnable Python script (song analysis, source scanning, QA probing).
+  Plus `scripts/` — working, run-as-is implementations of the core engines, not just descriptions of them:
+  - `scripts/procedural/` — 10 standalone audio-reactive GLSL renderers (moderngl): a raymarched ember tunnel, a log-polar kaleidoscope mandala, an infinite-zoom starburst, a glass-bloom kaleidoscope, a Mandelbox tunnel flythrough, a kaleidoscopic IFS fractal, a six-look sampler pack, a footage↔tunnel fusion shader, plus `footage_fx.py` (whole-frame FX on real clips) and `subject_fx.py` (matte-anchored FX on a person). Every renderer reads a real song's onset envelope and reacts to it — punch-zooms, flashes, and speed all ride the beat.
+  - `scripts/matte/` — `generate_local_person_matte.swift` (per-frame person matting via Apple's on-device Vision framework — compile once, run on any clip) and `media_contract.py` (the matte quality-gate thresholds as executable code).
+  - `scripts/build_onset_cut.py` — the onset-locked v2 cutter: cuts on every real transient in a song, holding when sparse and bursting when busy, instead of a fixed density preset.
+  - `scripts/scan_shot_quality.py` — the shot-level footage quality gate (luma/sharpness/text/border/colorfulness/motion) that decides which footage is even allowed into an edit.
+  - `scripts/choose_viral_window.py` — picks the best 15-30s window of a song by chorus repetition, energy build, loop seam, and lyric placement.
+
+- **`skills/song-edit-analysis/`**, **`skills/beat-synced-montage-builder/`**, **`skills/generated-media-sourcing/`**, **`skills/edit-delivery-qa/`** — a companion kit of narrower, script-bundled skills covering the same pipeline stage by stage, each with its own runnable Python script (full song analysis, source scanning, QA probing).
 
 ## Using these skills
 

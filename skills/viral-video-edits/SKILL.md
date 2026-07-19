@@ -5,7 +5,7 @@ description: End-to-end system for making S-tier beat-synced short-form music vi
 
 # Viral Video Edits
 
-A complete method for producing beat-perfect, effect-integrated vertical music videos that read as S-tier videography. Built from a working production system (the Das/Surya campaign) and its accumulated client feedback. The single success metric is performance (retention + shares), and every rule below exists because its violation was field-observed to fail.
+A complete method for producing beat-perfect, effect-integrated vertical music videos that read as S-tier videography. Built from a working production system (an independent musician's short-form promo campaign) and its accumulated client feedback. The single success metric is performance (retention + shares), and every rule below exists because its violation was field-observed to fail.
 
 ## The Laws (non-negotiable; each was learned the hard way)
 
@@ -57,6 +57,19 @@ For anything nontrivial, write the plan down first (design doc / shot-by-shot sl
 - `references/delivery-qa.md` — encode settings, deliverables, QA pass, verdict format, publishing package. Read before calling anything finished.
 - `references/design-docs.md` — idea sheet → slate → design doc → plan patterns. Read when planning a new production or campaign.
 
+## Bundled scripts (runnable, not just described)
+
+These are working implementations of the core engines — reach for them before writing new ones from scratch. All are plain CLI tools; run `--help` or read the docstring at the top of each file.
+
+- `scripts/choose_viral_window.py` — viral window selection (song-analysis.md §2). `--audio song.wav [--transcript whisper.json] [--tiktok-start SEC] [--durations 15,22,30] --out DIR`.
+- `scripts/scan_shot_quality.py` — the shot-level footage quality gate (footage-sourcing.md). `--root path/to/footage [--min-shot 1.2] [--jobs 3]` → writes `shot_map.json`. Needs `opencv-python`, `scenedetect`, `pytesseract`.
+- `scripts/build_onset_cut.py` — the onset-locked v2 cut engine (song-analysis.md §3, integrated-fx.md architecture A). `--config job.json [--shot-map shot_map.json]`; see the docstring for the job schema.
+- `scripts/matte/generate_local_person_matte.swift` — per-frame person matting via Apple Vision (integrated-fx.md). Compile with `swiftc generate_local_person_matte.swift -O -framework AVFoundation -framework Vision -framework CoreImage -framework ImageIO -o mattegen` (macOS 14+), then run `mattegen source.mp4 proposal_dir/`.
+- `scripts/matte/media_contract.py` — the matte quality-gate implementation (`validate_matte_statistics`, `matte_statistics`, `probe_media`, `validate_sync`) — the exact thresholds from integrated-fx.md as code, not just prose.
+- `scripts/procedural/` — 10 standalone moderngl/GLSL renderers (`render_color_tunnel.py`, `render_glass_bloom.py`, `render_mandala.py`, `render_fractal_neon.py`, `render_shader_pack.py`, `render_neon_cathedral.py`, `render_dream_portal.py`, `render_hyper_space_jump.py`, `render_hyper_kaleido.py`, `render_portal_weave.py`) plus `footage_fx.py` (whole-frame FX on real footage) and `subject_fx.py` (matte-anchored FX sampler) — see procedural-renderers.md. Each takes `--audio --start --dur --out [--fps 30 --w 1080 --h 1920]`; several also support `--still` for fast art-direction checks. Needs `moderngl`, `librosa`, `numpy`, `Pillow`.
+
+Song-analysis (`script/analyze_song_for_editing.py`, the beats/sections/energy producer) isn't bundled here — use the equivalent script already bundled in the companion `song-edit-analysis` skill (same kit), or reimplement from song-analysis.md §1.
+
 ## Working in the home repo
 
-When this skill runs inside the original workspace (`New project 3`), use the existing implementations instead of rewriting: analysis `script/analyze_song_for_editing.py`, windows `script/choose_viral_window.py`, onset engine `script/build_onset_cut.py`, shot gate `script/scan_shot_quality.py` + `script/incremental_shot_scan.py` (map: `assets/sourced_footage/shot_map.json`), sourcing `script/source_youtube_cc.py` / `script/source_pexels.py`, mattes `script/surya_people_fx/`, procedural renderers `script/procedural/`, batch system `script/generate_100_jobs.py` → `script/build_surya_100.py` → `script/build_100_gallery.py`, experiment loop `script/meta_loop.py`, TouchDesigner `touchdesigner/scripts/`. Python env: `.venv_audio/bin/python` (librosa, moderngl, numpy, Pillow, opencv, scenedetect, pytesseract, sklearn); ffmpeg/ffprobe/yt-dlp on PATH. Study `script/procedural/with_u_multitude.py` (best-received cut) and `script/build_dreamcatcher_v5_shapeshift.py` (deepest choreography) as exemplars. Elsewhere, rebuild from the reference docs — they contain every load-bearing constant.
+If this skill is running inside the original production workspace it was extracted from, prefer that repo's own copies of these scripts (they may have accumulated fixes) plus its batch/sourcing infrastructure (job generators, gallery builders, the posting-experiment loop) over the bundled versions here. Elsewhere — which is the common case for this public skill — the bundled `scripts/` are the full implementations; the reference docs contain every load-bearing constant needed to extend or reimplement them.
