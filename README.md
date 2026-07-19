@@ -25,6 +25,16 @@ These were extracted from a working production system and its accumulated field 
 
 - **`skills/song-edit-analysis/`**, **`skills/beat-synced-montage-builder/`**, **`skills/generated-media-sourcing/`**, **`skills/edit-delivery-qa/`** — a companion kit of narrower, script-bundled skills covering the same pipeline stage by stage, each with its own runnable Python script (full song analysis, source scanning, QA probing).
 
+## Workflows — see it in action
+
+**[WORKFLOWS.md](WORKFLOWS.md)** walks through 6 concrete workflows with runnable commands and a real rendered GIF under each one — from a footage-free audio visualizer, to fusing real footage with a shader in one pass, to a full onset-locked multi-clip montage. Every GIF was rendered directly from this repo's scripts against a synthetic, non-copyrighted test beat and synthetic test clips bundled in `demo/` — nothing shown is a mockup, and you can reproduce every one of them yourself.
+
+One example — tracking a person and applying an effect to ONLY them while the background stays untouched (`subject_fx.py`'s `subject_kaleido` mode):
+
+![the person folds into a kaleidoscope of themselves while the background is completely untouched](demo/gifs/subject_kaleido.gif)
+
+See [WORKFLOWS.md](WORKFLOWS.md) for this and the other 5 workflows (pure visualizer, beat-reactive footage FX, footage+tunnel shader fusion, onset-locked montage cutting, viral-window analysis).
+
 ## Using these skills
 
 ### Claude Code / Claude (skills)

@@ -4,18 +4,29 @@
 Requires a prepared segment (1080x1920@30) and a directory of per-frame
 person mattes (proposal_%06d.png from generate_local_person_matte.swift).
 
-Five subject-aware treatments, 3 bars each, continuous audio:
-  world_ripple  - the WORLD time-ripples, the skater stays crisp
-  echo_clones   - tinted onion-skin ghosts of the skater trail behind,
-                  background untouched, ghost strength rides the beat
-  neon_rim      - pulsing neon outline traced around the skater,
-                  world dimmed to make them the light source
-  bg_kaleido    - the world folds into a kaleidoscope, skater rides it
-  subject_prism - the skater RGB-splits and glitches on hits, world intact
+Six subject-aware treatments, 3 bars each, continuous audio:
+  world_ripple    - the WORLD time-ripples, the skater stays crisp
+  echo_clones     - tinted onion-skin ghosts of the skater trail behind,
+                    background untouched, ghost strength rides the beat
+  neon_rim        - pulsing neon outline traced around the skater,
+                    world dimmed to make them the light source
+  bg_kaleido      - the world folds into a kaleidoscope, skater rides it
+  subject_prism   - the skater RGB-splits and glitches on hits, world intact
+  subject_kaleido - the skater folds into a kaleidoscope of THEMSELVES
+                    (their own pixels, mirrored into wedges); the world
+                    is untouched. The inverse of bg_kaleido.
 
 Usage:
   subject_fx.py --segment work/segment2.mp4 --mattes work/mattes2 \
       --audio song.mp3 --start 81.92 --out outputs/procedural/subject_fx
+
+Renders all modes as a labeled sampler reel. For production use of ONLY one
+look (e.g. just subject_kaleido), don't reorder or trim MODES — the shader's
+`uMode==N` branches are hardcoded to these exact positions (subject_kaleido
+is the final `else`, i.e. index 5). Instead, write your own render loop that
+imports this module's VERT/FRAG/onset_env/HIST and pins
+`prog["uMode"].value` to the fixed index of the look you want for every
+frame, rather than looping over MODES.
 """
 from __future__ import annotations
 
@@ -29,7 +40,7 @@ FONT = "/System/Library/Fonts/Supplemental/Courier New Bold.ttf"
 BPM = 143.55
 BAR = 4 * 60.0 / BPM
 HIST = 24
-MODES = ["world_ripple", "echo_clones", "neon_rim", "bg_kaleido", "subject_prism"]
+MODES = ["world_ripple", "echo_clones", "neon_rim", "bg_kaleido", "subject_prism", "subject_kaleido"]
 
 VERT = "#version 330\nin vec2 in_pos;\nvoid main(){gl_Position=vec4(in_pos,0.0,1.0);}"
 
@@ -113,7 +124,7 @@ void main(){
         vec2 suv=clamp(vec2(cos(a),sin(a))*r*0.85+0.5,0.0,1.0);
         vec3 bg=src(suv)*(0.9+0.2*uPulse);
         col=mix(bg, src(uv01), m);
-    } else {
+    } else if(uMode==4){
         // SUBJECT PRISM: only the subject glitches, on the hits
         vec3 base=src(uv01);
         float band=floor(uv01.y*26.0);
@@ -132,6 +143,24 @@ void main(){
             matte(uv01+vec2(e.x,0.0))-matte(uv01-vec2(e.x,0.0)),
             matte(uv01+vec2(0.0,e.y))-matte(uv01-vec2(0.0,e.y))))*2.0,0.0,1.0);
         col+=vec3(1.0)*edge*uPulse*0.8;
+    } else {
+        // SUBJECT KALEIDO: the person folds into a kaleidoscope of
+        // themselves; the world stays untouched. Same fold math as
+        // BG KALEIDO above, but the mix gates the OPPOSITE way — normal
+        // world by default, kaleido fold only where the matte is lit.
+        float zoom=1.0-0.08*uPulse;
+        vec2 c=uv*zoom;
+        float r=length(c)+1e-4, a=atan(c.y,c.x)+uFlow*0.08;
+        float sec=2.0*PI/8.0; a=mod(a,sec); a=abs(a-sec*0.5);
+        vec2 suv=clamp(vec2(cos(a),sin(a))*r*0.85+0.5,0.0,1.0);
+        vec3 folded=src(suv)*(1.0+0.20*uPulse);
+        col=mix(src(uv01), folded, m);
+        // thin neon edge keeps the silhouette readable against real bg
+        vec2 e=vec2(3.0)/uRes;
+        float edge=clamp(length(vec2(
+            matte(uv01+vec2(e.x,0.0))-matte(uv01-vec2(e.x,0.0)),
+            matte(uv01+vec2(0.0,e.y))-matte(uv01-vec2(0.0,e.y))))*2.0,0.0,1.0);
+        col+=pal(0.5+0.1*sin(uFlow*0.5))*edge*(0.4+0.6*uPulse);
     }
 
     col*=1.0-0.30*dot(uv,uv);
